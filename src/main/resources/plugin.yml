@@ -1,0 +1,12 @@
+name: OpenAntiRedstoneLag
+version: 1.0
+author: Envel
+description: Find redstone tick generators
+
+main: org.opencommunity.envel.OpenAntiRedstoneLag
+
+commands:
+   rl:
+      description: Get report
+   redstonelag:
+      description: Get report
