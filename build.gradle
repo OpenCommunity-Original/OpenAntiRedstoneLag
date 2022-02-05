@@ -6,8 +6,8 @@ plugins {
 group 'org.opencommunity'
 version '1.0'
 jar.enabled = false;
-sourceCompatibility = '17'
-targetCompatibility = '17'
+//sourceCompatibility = '17'
+//targetCompatibility = '17'
 
 repositories {
     mavenLocal();

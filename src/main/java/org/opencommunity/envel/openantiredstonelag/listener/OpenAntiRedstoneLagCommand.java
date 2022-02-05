@@ -1,5 +1,10 @@
 package org.opencommunity.envel.openantiredstonelag.listener;
 
+import net.md_5.bungee.api.chat.ClickEvent;
+import net.md_5.bungee.api.chat.ComponentBuilder;
+import net.md_5.bungee.api.chat.HoverEvent;
+import net.md_5.bungee.api.chat.TextComponent;
+import net.md_5.bungee.api.chat.hover.content.Text;
 import org.bukkit.Bukkit;
 import org.bukkit.Chunk;
 import org.bukkit.command.Command;
@@ -12,8 +17,10 @@ import java.util.HashMap;
 import java.util.Iterator;
 
 public class OpenAntiRedstoneLagCommand implements CommandExecutor {
-    public boolean onCommand(CommandSender sender, Command cmd, String label, String[] args) {
-        if (!sender.hasPermission("rl.use")) {
+    // This method is called, when somebody uses our command
+    @Override
+    public boolean onCommand(CommandSender sender, Command command, String label, String[] args) {
+        if (!sender.hasPermission("rlag.use")) {
             sender.sendMessage(OpenAntiRedstoneLag.name + "§cYou do not have the permission to use that.");
             return true;
         } else if (args.length > 0) {
@@ -39,16 +46,17 @@ public class OpenAntiRedstoneLagCommand implements CommandExecutor {
                     }
                 }
                 if (!RedstoneManager.redstoneChunks.containsKey(Long.valueOf(RedstoneManager.lastTime - ((long) (list * 60))))) {
-                    sender.sendMessage(OpenAntiRedstoneLag.name + "§cSadly no data is available.");
+                    sender.sendMessage(OpenAntiRedstoneLag.name + "§cNo data is available.");
                     return true;
                 } else if (RedstoneManager.redstoneChunks.get(Long.valueOf(RedstoneManager.lastTime - ((long) (list * 60)))).size() <= 0) {
-                    sender.sendMessage(OpenAntiRedstoneLag.name + "§cSadly there is no data at the moment, please wait up to 1 minute.");
+                    sender.sendMessage(OpenAntiRedstoneLag.name + "§cThere is no data at the moment, please wait up to 1 minute.");
                     return true;
                 } else if (RedstoneManager.redstoneChunks.get(Long.valueOf(RedstoneManager.lastTime - ((long) (list * OpenAntiRedstoneLag.config.getInterval())))).containsKey(Bukkit.getWorld(world))) {
                     HashMap<Chunk, Integer> listMap = RedstoneManager.redstoneChunks.get(Long.valueOf(RedstoneManager.lastTime - ((long) (list * OpenAntiRedstoneLag.config.getInterval())))).get(Bukkit.getWorld(world));
                     int maxPage = (int) Math.ceil(((double) (listMap.size() - 1)) / (((double) OpenAntiRedstoneLag.config.getPageItems()) * 1.0d));
                     if (listMap.size() > page * OpenAntiRedstoneLag.config.getPageItems()) {
-                        sender.sendMessage("§7~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~§8(§7" + (page + 1) + "§8/§7" + maxPage + "§8)");
+                        sender.sendMessage("");
+                        sender.sendMessage(OpenAntiRedstoneLag.name);
                         sender.sendMessage("§cRedstone-Changes/Minute §8- §6Chunk-Position");
                         sender.sendMessage("");
                         Iterator<Chunk> it = listMap.keySet().iterator();
@@ -62,13 +70,17 @@ public class OpenAntiRedstoneLagCommand implements CommandExecutor {
                             }
                             list++;
                         }
-                        sender.sendMessage("§7~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~§8(§7" + (page + 1) + "§8/§7" + maxPage + "§8)");
+                        sender.sendMessage("");
+                        TextComponent nextm = new TextComponent("§7Page " + (page + 1) + "/" + maxPage + " §lNext page");
+                        nextm.setClickEvent(new ClickEvent(ClickEvent.Action.RUN_COMMAND, "/rlag 2"));
+                        sender.sendMessage(nextm);
+                        sender.sendMessage("");
                         return true;
                     }
                     sender.sendMessage(OpenAntiRedstoneLag.name + "§cThe list has not that much entries.");
                     return true;
                 } else {
-                    sender.sendMessage(OpenAntiRedstoneLag.name + "§cSadly no data is available.");
+                    sender.sendMessage(OpenAntiRedstoneLag.name + "§cNo data is available.");
                     return true;
                 }
             } else {

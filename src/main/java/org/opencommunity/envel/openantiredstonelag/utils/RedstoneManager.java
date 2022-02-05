@@ -16,7 +16,7 @@ public class RedstoneManager {
     public static long lastTime = System.currentTimeMillis();
 
     public static void runTask() {
-        Bukkit.getScheduler().scheduleAsyncRepeatingTask(OpenAntiRedstoneLag.m, new Runnable() {
+        Bukkit.getScheduler().scheduleSyncRepeatingTask(OpenAntiRedstoneLag.m, new Runnable() {
             @Override
             public void run() {
                 RedstoneManager.lastTime = System.currentTimeMillis() / 1000;

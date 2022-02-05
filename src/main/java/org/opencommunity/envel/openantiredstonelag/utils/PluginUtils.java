@@ -8,8 +8,8 @@ import org.opencommunity.envel.openantiredstonelag.listener.RedstoneActivationLi
 public class PluginUtils {
 
     public static void loadCommands() {
-        OpenAntiRedstoneLag.m.getCommand("rl").setExecutor(new OpenAntiRedstoneLagCommand());
-        OpenAntiRedstoneLag.m.getCommand("OpenAntiRedstoneLag").setExecutor(new OpenAntiRedstoneLagCommand());
+        OpenAntiRedstoneLag.m.getCommand("rlag").setExecutor(new OpenAntiRedstoneLagCommand());
+        OpenAntiRedstoneLag.m.getCommand("redstonelag").setExecutor(new OpenAntiRedstoneLagCommand());
     }
 
     public static void loadListeners() {
