@@ -1,6 +1,6 @@
 name: OpenAntiRedstoneLag
-version: 1.0
-api-version: 1.18
+version: ${version}
+api-version: 1.19
 author: Envel
 description: Find redstone tick generators
 

@@ -8,7 +8,6 @@ import org.opencommunity.envel.openantiredstonelag.listener.RedstoneActivationLi
 
 import java.util.ArrayList;
 import java.util.HashMap;
-import java.util.Iterator;
 import java.util.List;
 
 public class RedstoneManager {
@@ -16,32 +15,24 @@ public class RedstoneManager {
     public static long lastTime = System.currentTimeMillis();
 
     public static void runTask() {
-        Bukkit.getScheduler().scheduleSyncRepeatingTask(OpenAntiRedstoneLag.m, new Runnable() {
-            @Override
-            public void run() {
-                RedstoneManager.lastTime = System.currentTimeMillis() / 1000;
-                HashMap<World, HashMap<Chunk, Integer>> sortedWorlds = new HashMap<>();
-                Iterator<World> it = RedstoneActivationListener.redstoneTicks.keySet().iterator();
-                while (it.hasNext()) {
-                    World world = it.next();
-                    sortedWorlds.put(world, MapUtils.sortByValues(RedstoneActivationListener.redstoneTicks.get(world)));
-                }
-                RedstoneManager.redstoneChunks.put(Long.valueOf(RedstoneManager.lastTime), sortedWorlds);
-                RedstoneActivationListener.redstoneTicks.clear();
-                long removeTime = RedstoneManager.lastTime - ((long) (OpenAntiRedstoneLag.config.getInterval() * OpenAntiRedstoneLag.config.getStoredLists()));
-                List<Long> removeTimes = new ArrayList<>();
-                Iterator<Long> it2 = RedstoneManager.redstoneChunks.keySet().iterator();
-                while (it2.hasNext()) {
-                    Long time = it2.next();
-                    if (time.longValue() < removeTime) {
-                        removeTimes.add(time);
-                    }
-                }
-                Iterator<Long> it3 = removeTimes.iterator();
-                while (it3.hasNext()) {
-                    RedstoneManager.redstoneChunks.remove(it3.next());
+        Bukkit.getScheduler().scheduleSyncRepeatingTask(OpenAntiRedstoneLag.m, () -> {
+            RedstoneManager.lastTime = System.currentTimeMillis() / 1000;
+            HashMap<World, HashMap<Chunk, Integer>> sortedWorlds = new HashMap<>();
+            for (World world : RedstoneActivationListener.redstoneTicks.keySet()) {
+                sortedWorlds.put(world, new HashMap<>(MapUtils.sortByValues(RedstoneActivationListener.redstoneTicks.get(world))));
+            }
+            RedstoneManager.redstoneChunks.put(RedstoneManager.lastTime, sortedWorlds);
+            RedstoneActivationListener.redstoneTicks.clear();
+            long removeTime = RedstoneManager.lastTime - ((long) OpenAntiRedstoneLag.config.getInterval() * OpenAntiRedstoneLag.config.getStoredLists());
+            List<Long> removeTimes = new ArrayList<>();
+            for (Long time : RedstoneManager.redstoneChunks.keySet()) {
+                if (time < removeTime) {
+                    removeTimes.add(time);
                 }
             }
-        }, 20, 20 * OpenAntiRedstoneLag.config.getInterval());
+            for (Long time : removeTimes) {
+                RedstoneManager.redstoneChunks.remove(time);
+            }
+        }, 20, 20L * OpenAntiRedstoneLag.config.getInterval());
     }
 }

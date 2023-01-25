@@ -1,25 +1,22 @@
 package org.opencommunity.envel.openantiredstonelag.listener;
 
 import net.md_5.bungee.api.chat.ClickEvent;
-import net.md_5.bungee.api.chat.ComponentBuilder;
-import net.md_5.bungee.api.chat.HoverEvent;
 import net.md_5.bungee.api.chat.TextComponent;
-import net.md_5.bungee.api.chat.hover.content.Text;
 import org.bukkit.Bukkit;
 import org.bukkit.Chunk;
 import org.bukkit.command.Command;
 import org.bukkit.command.CommandExecutor;
 import org.bukkit.command.CommandSender;
+import org.jetbrains.annotations.NotNull;
 import org.opencommunity.envel.openantiredstonelag.OpenAntiRedstoneLag;
 import org.opencommunity.envel.openantiredstonelag.utils.RedstoneManager;
 
 import java.util.HashMap;
-import java.util.Iterator;
 
 public class OpenAntiRedstoneLagCommand implements CommandExecutor {
     // This method is called, when somebody uses our command
     @Override
-    public boolean onCommand(CommandSender sender, Command command, String label, String[] args) {
+    public boolean onCommand(CommandSender sender, @NotNull Command command, @NotNull String label, String[] args) {
         if (!sender.hasPermission("rlag.use")) {
             sender.sendMessage(OpenAntiRedstoneLag.name + "§cYou do not have the permission to use that.");
             return true;
@@ -31,37 +28,35 @@ public class OpenAntiRedstoneLagCommand implements CommandExecutor {
                 if (args.length > 1) {
                     if (args.length > 2) {
                         try {
-                            list = Integer.valueOf(args[2]).intValue() - 1;
+                            list = Integer.parseInt(args[2]) - 1;
                         } catch (NumberFormatException e) {
                             sender.sendMessage(OpenAntiRedstoneLag.name + "§cPlease enter a valid number for the list.");
                             return true;
                         }
                     } else {
                         try {
-                            page = Integer.valueOf(args[1]).intValue() - 1;
+                            page = Integer.parseInt(args[1]) - 1;
                         } catch (NumberFormatException e2) {
                             sender.sendMessage(OpenAntiRedstoneLag.name + "§cPlease enter a valid number for the page.");
                             return true;
                         }
                     }
                 }
-                if (!RedstoneManager.redstoneChunks.containsKey(Long.valueOf(RedstoneManager.lastTime - ((long) (list * 60))))) {
+                if (!RedstoneManager.redstoneChunks.containsKey(RedstoneManager.lastTime - (list * 60L))) {
                     sender.sendMessage(OpenAntiRedstoneLag.name + "§cNo data is available.");
                     return true;
-                } else if (RedstoneManager.redstoneChunks.get(Long.valueOf(RedstoneManager.lastTime - ((long) (list * 60)))).size() <= 0) {
+                } else if (RedstoneManager.redstoneChunks.get(RedstoneManager.lastTime - (list * 60L)).size() <= 0) {
                     sender.sendMessage(OpenAntiRedstoneLag.name + "§cThere is no data at the moment, please wait up to 1 minute.");
                     return true;
-                } else if (RedstoneManager.redstoneChunks.get(Long.valueOf(RedstoneManager.lastTime - ((long) (list * OpenAntiRedstoneLag.config.getInterval())))).containsKey(Bukkit.getWorld(world))) {
-                    HashMap<Chunk, Integer> listMap = RedstoneManager.redstoneChunks.get(Long.valueOf(RedstoneManager.lastTime - ((long) (list * OpenAntiRedstoneLag.config.getInterval())))).get(Bukkit.getWorld(world));
-                    int maxPage = (int) Math.ceil(((double) (listMap.size() - 1)) / (((double) OpenAntiRedstoneLag.config.getPageItems()) * 1.0d));
+                } else if (RedstoneManager.redstoneChunks.get(RedstoneManager.lastTime - ((long) list * OpenAntiRedstoneLag.config.getInterval())).containsKey(Bukkit.getWorld(world))) {
+                    HashMap<Chunk, Integer> listMap = RedstoneManager.redstoneChunks.get(RedstoneManager.lastTime - ((long) list * OpenAntiRedstoneLag.config.getInterval())).get(Bukkit.getWorld(world));
+                    int maxPage = (int) Math.ceil(((double) (listMap.size() - 1)) / (((double) OpenAntiRedstoneLag.config.getPageItems())));
                     if (listMap.size() > page * OpenAntiRedstoneLag.config.getPageItems()) {
                         sender.sendMessage("");
                         sender.sendMessage(OpenAntiRedstoneLag.name);
                         sender.sendMessage("§cRedstone-Changes/Minute §8- §6Chunk-Position");
                         sender.sendMessage("");
-                        Iterator<Chunk> it = listMap.keySet().iterator();
-                        while (it.hasNext()) {
-                            Chunk chunk = it.next();
+                        for (Chunk chunk : listMap.keySet()) {
                             if (list > (page * OpenAntiRedstoneLag.config.getPageItems()) + OpenAntiRedstoneLag.config.getPageItems()) {
                                 break;
                             }

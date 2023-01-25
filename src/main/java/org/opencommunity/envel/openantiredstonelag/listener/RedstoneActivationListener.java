@@ -18,7 +18,7 @@ public class RedstoneActivationListener implements Listener {
         if (redstoneTicks.containsKey(world)) {
             HashMap<Chunk, Integer> ticks = redstoneTicks.get(world);
             if (ticks.containsKey(chunk)) {
-                ticks.put(chunk, Integer.valueOf(ticks.get(chunk).intValue() + 1));
+                ticks.put(chunk, ticks.get(chunk) + 1);
             } else {
                 ticks.put(chunk, 1);
             }

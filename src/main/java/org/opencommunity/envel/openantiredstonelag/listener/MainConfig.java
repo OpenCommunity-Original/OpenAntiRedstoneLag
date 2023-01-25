@@ -7,11 +7,11 @@ import java.io.File;
 import java.io.IOException;
 
 public class MainConfig {
+    private final File file = new File("plugins/OpenAntiRedstoneLag", "config.yml");
+    private final FileConfiguration config = YamlConfiguration.loadConfiguration(this.file);
     private int pageItems = 15;
     private int storedLists = 5;
     private int interval = 60;
-    private final File file = new File("plugins/OpenAntiRedstoneLag", "config.yml");
-    private final FileConfiguration config = YamlConfiguration.loadConfiguration(this.file);
 
     public void load() {
         this.pageItems = setObject("settings.page.items", this.pageItems);
@@ -23,7 +23,7 @@ public class MainConfig {
         if (this.config.contains(path)) {
             return this.config.getInt(path);
         }
-        this.config.set(path, Integer.valueOf(object));
+        this.config.set(path, object);
         save();
         return object;
     }
