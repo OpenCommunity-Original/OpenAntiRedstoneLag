@@ -1,5 +1,6 @@
 package org.opencommunity.envel.openantiredstonelag;
 
+import org.bukkit.plugin.Plugin;
 import org.bukkit.plugin.java.JavaPlugin;
 import org.opencommunity.envel.openantiredstonelag.listener.MainConfig;
 import org.opencommunity.envel.openantiredstonelag.utils.RedstoneManager;
@@ -11,6 +12,10 @@ public class OpenAntiRedstoneLag extends JavaPlugin {
     public static OpenAntiRedstoneLag m;
     public static String name = "   §c§lRedstoneLag ";
     public static MainConfig config;
+
+    public static Plugin getPlugin() {
+        return m;
+    }
 
     public void onEnable() {
         m = this;

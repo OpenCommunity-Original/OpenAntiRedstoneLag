@@ -1,7 +1,8 @@
 package org.opencommunity.envel.openantiredstonelag.listener;
 
-import net.md_5.bungee.api.chat.ClickEvent;
-import net.md_5.bungee.api.chat.TextComponent;
+import net.kyori.adventure.platform.bukkit.BukkitAudiences;
+import net.kyori.adventure.text.Component;
+import net.kyori.adventure.text.event.ClickEvent;
 import org.bukkit.Bukkit;
 import org.bukkit.Chunk;
 import org.bukkit.command.Command;
@@ -45,7 +46,7 @@ public class OpenAntiRedstoneLagCommand implements CommandExecutor {
                 if (!RedstoneManager.redstoneChunks.containsKey(RedstoneManager.lastTime - (list * 60L))) {
                     sender.sendMessage(OpenAntiRedstoneLag.name + "§cNo data is available.");
                     return true;
-                } else if (RedstoneManager.redstoneChunks.get(RedstoneManager.lastTime - (list * 60L)).size() <= 0) {
+                } else if (RedstoneManager.redstoneChunks.get(RedstoneManager.lastTime - (list * 60L)).size() == 0) {
                     sender.sendMessage(OpenAntiRedstoneLag.name + "§cThere is no data at the moment, please wait up to 1 minute.");
                     return true;
                 } else if (RedstoneManager.redstoneChunks.get(RedstoneManager.lastTime - ((long) list * OpenAntiRedstoneLag.config.getInterval())).containsKey(Bukkit.getWorld(world))) {
@@ -66,9 +67,9 @@ public class OpenAntiRedstoneLagCommand implements CommandExecutor {
                             list++;
                         }
                         sender.sendMessage("");
-                        TextComponent nextm = new TextComponent("§7Page " + (page + 1) + "/" + maxPage + " §lNext page");
-                        nextm.setClickEvent(new ClickEvent(ClickEvent.Action.RUN_COMMAND, "/rlag 2"));
-                        sender.sendMessage(nextm);
+                        Component nextm = Component.text("§7Page " + (page + 1) + "/" + maxPage + " §lNext page")
+                                .clickEvent(ClickEvent.clickEvent(ClickEvent.Action.RUN_COMMAND, "/rlag 2"));
+                        BukkitAudiences.create(OpenAntiRedstoneLag.getPlugin()).sender(sender).sendMessage(nextm);
                         sender.sendMessage("");
                         return true;
                     }
