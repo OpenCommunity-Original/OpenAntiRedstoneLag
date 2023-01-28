@@ -1,6 +1,5 @@
 package org.opencommunity.envel.openantiredstonelag.listener;
 
-import net.kyori.adventure.platform.bukkit.BukkitAudiences;
 import net.kyori.adventure.text.Component;
 import net.kyori.adventure.text.event.ClickEvent;
 import org.bukkit.Bukkit;
@@ -69,7 +68,7 @@ public class OpenAntiRedstoneLagCommand implements CommandExecutor {
                         sender.sendMessage("");
                         Component nextm = Component.text("§7Page " + (page + 1) + "/" + maxPage + " §lNext page")
                                 .clickEvent(ClickEvent.clickEvent(ClickEvent.Action.RUN_COMMAND, "/rlag 2"));
-                        BukkitAudiences.create(OpenAntiRedstoneLag.getPlugin()).sender(sender).sendMessage(nextm);
+                        sender.sendMessage(nextm);
                         sender.sendMessage("");
                         return true;
                     }
